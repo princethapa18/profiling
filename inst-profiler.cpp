@@ -1,4 +1,4 @@
-/* 28 Jan 2022
+/* 28 Jan 2022 Week 04
    Instrumentation profiling Example
 */
 #include <iostream>
@@ -75,6 +75,25 @@ int vec_alloc_by_reserve(int n)
         v.emplace_back(Grid(3, 4, 0.5f, 0.6f, 0.7f));
 }
 
+int vec_emplace_back(int n)
+{
+    ScopedTimer tmr("vec_emplace_back");
+    std::vector<Grid> v;
+    v.reserve(n);
+    for(int i = 0; i < n; i++)
+        v.emplace_back(Grid(3, 4, 0.5f, 0.6f, 0.7f)); 
+}
+
+int vec_push_back(int n)
+{
+    ScopedTimer tmr("vec_push_back");
+    std::vector<Grid> v;
+    v.reserve(n);
+    for(int i = 0; i < n; i++)
+        v.push_back(Grid(3, 4, 0.5f, 0.6f, 0.7f)); 
+}
+
+
 int main()
 {
     std::cout << "Enter a number\n"; 
@@ -82,6 +101,8 @@ int main()
     cin >> n;
     vec_alloc(n);
     vec_alloc_by_reserve(n);
+    vec_push_back(n);
+    vec_emplace_back(n);
     return 0;
 }
 
@@ -126,5 +147,20 @@ Enter a number
 10000
 3 ms vec_alloc
 1 ms vec_alloc_by_reserve
+
+[thapa@gns101 C++]$ ./a.out 
+Enter a number
+1000000
+44 ms vec_alloc
+20 ms vec_alloc_by_reserve
+23 ms vec_push_back
+18 ms vec_emplace_back
+[thapa@gns101 C++]$ ./a.out 
+Enter a number
+1000000000
+40353 ms vec_alloc
+22151 ms vec_alloc_by_reserve
+25994 ms vec_push_back
+22572 ms vec_emplace_back
 
 */
